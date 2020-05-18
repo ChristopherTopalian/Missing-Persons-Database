@@ -1,0 +1,115 @@
+<!-- All Rights Reserved Christopher Topalian Copyright 2020 -->
+
+<html><head>
+<title> Missing Persons Database </title>
+<meta charset="UTF-8">
+
+<script src="_missing_persons.js"></script>
+
+<style>
+.theImage
+{
+    width: 60%;
+    vertical-align: middle;
+}
+
+table
+{
+  padding:5px;
+  margin: 1px;
+}
+
+td
+{
+  padding:10px;
+  margin: 10px;
+}
+</style>
+
+</head>
+
+<body onload="renderHtml();">
+    
+  <center> MISSING PERSONS DATABASE </center>
+<script>
+
+function renderHtml()
+{
+  var jsonOutputDiv = document.getElementById("theJsonOutput");
+  var output = '';
+
+  for(var i = 0; i < records.length; i++)
+  {
+    for(var i in records)
+    {
+      /*
+      How to Filter for 2 Criteria. Use the AND symbol.
+      if((records[i].tag.indexOf("missing") != -1) &&
+      (records[i].suspect.indexOf("John Doe") != -1))
+      */
+        
+      if(records[i].tag.indexOf("missing") != -1)
+      {
+        //output += '<a href= \''+records[i].url+'\' + .html  target="_blank">';
+        output += '<table border="1"><tr><td align="left" width="30%"><hr>';
+
+        output += "DATE MISSING: " + "<br>" + records[i].dateMissing.bold() + " " + "<br><hr>";
+
+        output += "DAY MISSING: " + "<br>" + records[i].dayMissing.bold() + " " + "<br><hr>";
+
+        output += "LOC MISSING: " + "<br>" + records[i].locationMissing.bold() + " " + "<br><hr>";
+
+        output += "DETAILS: " + "<br>" + records[i].locationMissingDetails.bold() + " " + "<hr>";
+
+        output += '</td><td width="30%" align="center">';
+
+        output += "NAME: " + records[i].name.bold() + " " + "<br>";
+
+        output += "AGE: " + records[i].age.bold() + " " + "<br>";
+
+        output += "D.O.B: " + records[i].dob.bold() + " " + "<br>";
+
+        output += '<a href= \''+records[i].urlLink+'\' target="_blank">';
+
+        output += '<img src= "zpictures/'+records[i].image+'\" class="theImage"></a><br>';
+       
+        output += "HEIGHT: " + records[i].height.bold() + " " + "<br>";
+
+        output += "WEIGHT: " + records[i].weight.bold() + " " + "<br>";
+
+        output += "HAIR COLOR: " + records[i].hairColor.bold() + " " + "<br>";
+
+        output += "EYE COLOR: " + records[i].eyeColor.bold() + " " + "<br>";
+
+        output += '</td><td align="center" width="15%">';
+
+        //output+= "SUSPECTS: " + records[i].suspects.bold() + " " + "<br>";
+
+        output += '<a href= \''+records[i].urlMap+'\' target="_blank">MAP</a>';
+
+        output += '</td><td align="center">';
+        output += "Burial Site Info" + "<br>";
+        output += records[i].burialSite.bold() + " " + "<br>";
+
+        //output += records[i].text + " ";
+        output += '<br>';
+        output += '</td></tr>'
+      }
+      output += '<hr>';
+    }
+  }
+        jsonOutputDiv.innerHTML = output;
+}
+
+</script>
+
+<!--<button id="insertIt" onclick="renderHtml()">
+  Insert to page
+</button>
+-->
+
+<div id="theJsonOutput">
+
+</div>
+
+</body></html>

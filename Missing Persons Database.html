@@ -1,0 +1,1205 @@
+<!-- All Rights Reserved Christopher Topalian Copyright 2020 -->
+
+<!DOCTYPE html><html lang="en">
+<head><title> Missing Persons Database </title>
+<meta charset="UTF-8">
+<script src="_missing_persons.js"></script>
+
+<script>
+let records = [];
+
+let nameEntered;
+let ageEntered;
+let dobEntered;
+let dateMissingEntered;
+let dayMissingEntered;
+let timeMissingEntered;
+let locationMissingEntered;
+let locationMissingDetailsEntered;
+let imageEntered;
+let heightEntered;
+let weightEntered;
+let hairColorEntered;
+let eyeColorEntered;
+let suspectsEntered;
+let burialSiteEntered;
+let urlLinkEntered;
+let urlMapEntered;
+let tagEntered;
+
+let theHtmlAddRecordWithTable;
+
+let idOfRecord;
+let recordEntry;
+let theIdHere;
+
+let nameOfRecords = "_missing_persons.js";
+
+function loadFunctions()
+{
+	loadRecord();
+
+	document.getElementById("nameInput").addEventListener("keyup", setName, false);
+
+	document.getElementById("ageInput").addEventListener("keyup", setAge, false);
+
+	document.getElementById("dobInput").addEventListener("keyup", setDob, false);
+
+	document.getElementById("dateMissingInput").addEventListener("keyup", setDateMissing, false);
+
+	document.getElementById("dayMissingInput").addEventListener("keyup", setDayMissing, false);
+
+	document.getElementById("timeMissingInput").addEventListener("keyup", setTimeMissing, false);
+
+	document.getElementById("locationMissingInput").addEventListener("keyup", setLocationMissing, false);
+
+	document.getElementById("locationMissingDetailsInput").addEventListener("keyup", setLocationMissingDetails, false);
+
+	document.getElementById("imageInput").addEventListener("keyup", setImage, false);
+
+	document.getElementById("heightInput").addEventListener("keyup", setHeight, false);
+
+	document.getElementById("weightInput").addEventListener("keyup", setWeight, false);
+
+	document.getElementById("hairColorInput").addEventListener("keyup", setHairColor, false);
+
+	document.getElementById("eyeColorInput").addEventListener("keyup", setEyeColor, false);
+
+	document.getElementById("suspectsInput").addEventListener("keyup", setSuspects, false);
+
+	document.getElementById("burialSiteInput").addEventListener("keyup", setBurialSite, false);
+
+	document.getElementById("urlLinkInput").addEventListener("keyup", setUrlLink, false);
+
+	document.getElementById("urlMapInput").addEventListener("keyup", setUrlMap, false);
+
+	document.getElementById("tagInput").addEventListener("keyup", setTag, false);
+
+	document.getElementById("clearTextButton").addEventListener("click", clearText, false);
+
+	document.getElementById("addRecordButton").addEventListener("click", addRecord, false);
+
+	document.getElementById("fullReportNewWindowButton").addEventListener("click", fullReportCodeNewWindow, false);
+
+	document.getElementById("fullReportCodeButton").addEventListener("click", reportToConsole, false);
+
+	document.getElementById("clearAllRecordsButton").addEventListener("click", clearAllRecords, false);
+
+	document.getElementById("deleteThisRecordButton").addEventListener("click", deleteThisRecord, false);
+
+	document.getElementById("showReverseOrderButton").addEventListener("click", showReverseOrder, false);
+
+	document.getElementById("jsonDownloadButton").addEventListener("click", jsonDownload, false);
+
+	startClear();	
+	printRecords();
+
+	defaultNameOfRecords();
+}
+
+function startClear()
+{
+	let inputs = document.getElementsByTagName('textarea');
+	for(let i = 0; i < inputs.length; i++)
+	{
+		inputs[i].value = '';
+	}
+	printRecords();  //ensures record entries are displayed
+}
+
+function clearText()
+{
+	let warningDelete = confirm("CLEAR ALL TEXT?");
+
+	if (warningDelete == true)
+	{
+		startClear();
+	}
+	else if(warningDelete == false)
+	{
+		alert("Canceled");
+		return;
+	}
+	startClear();
+}
+
+function loadRecord()
+{
+	let script = document.createElement('script');
+	script.onload = function() {
+  	printRecords();
+	};
+	script.src = nameOfRecords;
+	document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+function jsonDownload()
+{
+	//let object = window.records;
+	let object = records;
+	let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent('records='+ JSON.stringify(object)+';');
+
+	let dlAnchorElem = document.getElementById('downloadAnchorElem');
+	dlAnchorElem.setAttribute("href",dataStr);
+	dlAnchorElem.setAttribute("download", "_missing_persons.js");
+	dlAnchorElem.click();
+}
+
+function setName()
+{
+	nameEntered=document.getElementById('nameInput').value;
+	return nameEntered;
+}
+
+function setAge()
+{
+	ageEntered=document.getElementById('ageInput').value;
+	return ageEntered;
+}
+
+function setDob()
+{
+	dobEntered=document.getElementById('dobInput').value;
+	return dobEntered;
+}
+
+function setDateMissing()
+{
+	dateMissingEntered=document.getElementById('dateMissingInput').value;
+	return dateMissingEntered;
+}
+
+function setDayMissing()
+{
+	dayMissingEntered=document.getElementById('dayMissingInput').value;
+	return dayMissingEntered;
+}
+
+function setTimeMissing()
+{
+	timeMissingEntered = document.getElementById('timeMissingInput').value;
+	return timeMissingEntered;
+}
+
+function setLocationMissing()
+{
+	locationMissingEntered=document.getElementById('locationMissingInput').value;
+	return locationMissingEntered;
+}
+
+function setLocationMissingDetails()
+{
+	locationMissingDetailsEntered=document.getElementById('locationMissingDetailsInput').value;
+	return locationMissingDetailsEntered;
+}
+
+function setImage()
+{
+	imageEntered=document.getElementById('imageInput').value;
+	return imageEntered;
+}
+
+function setHeight()
+{
+	heightEntered=document.getElementById('heightInput').value;
+	return heightEntered;
+}
+
+function setWeight()
+{
+	weightEntered=document.getElementById('weightInput').value;
+	return weightEntered;
+}
+
+function setHairColor()
+{
+	hairColorEntered=document.getElementById('hairColorInput').value;
+	return hairColorEntered;
+}
+
+function setEyeColor()
+{
+	eyeColorEntered=document.getElementById('eyeColorInput').value;
+	return eyeColorEntered;
+}
+
+function setSuspects()
+{
+	suspectsEntered=document.getElementById('suspectsInput').value;
+	return suspectsEntered;
+}
+
+function setBurialSite()
+{
+	burialSiteEntered=document.getElementById('burialSiteInput').value;
+	return burialSiteEntered;
+}
+
+function setUrlLink()
+{
+	urlLinkEntered=document.getElementById('urlLinkInput').value;
+	return urlLinkEntered;
+}
+
+function setUrlMap()
+{
+	urlMapEntered=document.getElementById('urlMapInput').value;
+	return urlMapEntered;
+}
+
+function setTag()
+{
+	tagEntered=document.getElementById('tagInput').value;
+	return tagEntered;
+}
+
+function defaultNameOfRecords()
+{
+	nameOfRecords = "1.js";
+}
+
+function showReverseOrder()
+{
+	records.reverse();
+	printRecords();
+	//console.log("records=" + JSON.stringify(records) + ";");
+	console.log("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n");
+}
+
+function howManyRecords()
+{
+	let currentLength = records.length;
+	document.getElementById('displayCount').innerHTML = currentLength;
+}
+
+function clearAllRecords()
+{
+	let warningDelete = confirm("CLEAR ALL RECORDS?");
+
+	if (warningDelete == true)
+	{
+		//printRecords();
+		//alert("Okay");
+	}
+	else if(warningDelete == false)
+	{
+		alert("Canceled");
+		return;
+	}
+
+	records = []; //clears all records
+	idOfRecord = 0;
+
+	printRecords();
+	howManyRecords();
+	//console.log("records=" + JSON.stringify(records) + ";");
+	console.log("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n");
+}
+
+function deleteThisRecord(i)
+{
+	let warningDelete = confirm("DELETE ONLY This Record?");
+
+	if (warningDelete == true)
+	{
+		//alert("Okay");
+	}
+	else if(warningDelete == false)
+	{
+		alert("Canceled");
+		return;
+	}
+
+	let recordEnteredToDelete = document.getElementById("deleteRecordInput").value;
+	console.log(recordEnteredToDelete + " the entered record to delete");
+
+	document.getElementById('displayDeletedRecord').innerHTML = recordEnteredToDelete + " was deleted";
+
+	records.splice(recordEnteredToDelete,1);
+
+	printRecords();
+	//console.log("records=" + JSON.stringify(records) + ";");
+	console.log("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n");
+}
+
+function keepOnlyThisRecordButton(i)
+{
+	let warningKeep = confirm("Keep ONLY This Record?");
+
+	if (warningKeep == true)
+	{
+		//alert("Okay");
+	}
+	else if(warningKeep == false)
+	{
+		alert("Canceled");
+		return;
+	}
+
+	console.log("Keeping Only Record " + i);
+	records = records.splice(i,1);
+
+	printRecords();
+	//console.log("records=" + JSON.stringify(records) + ";");
+	console.log("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n");
+}
+
+function deleteThisRecordButton(i)
+{
+	let warningDelete = confirm("DELETE ONLY This Record?");
+
+	if (warningDelete == true)
+	{
+		//alert("Okay");
+	}
+	else if(warningDelete == false)
+	{
+		alert("Canceled");
+		return;
+	}
+
+	records.splice(i,1);
+
+	printRecords();
+
+	//console.log("records=" + JSON.stringify(records) + ";");
+	console.log("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n");
+}
+
+function moveRecordDown(i)
+{
+	let newplace = i + 1;
+	let oldplace = i;
+
+	records.splice(newplace, 0, records.splice(oldplace, 1)[0]);
+
+	printRecords();
+	//console.log("records=" + JSON.stringify(records) + ";");
+	console.log("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n");
+}
+
+function moveRecordUp(i)
+{
+	let newplace = i - 1;
+	let oldplace = i;
+
+	records.splice(newplace, 0, records.splice(oldplace, 1)[0]);
+
+	printRecords();
+	//console.log("records=" + JSON.stringify(records) + ";");
+	console.log("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n");
+}
+
+function findRecordIndex(someEntriesArray, theRecordIdToFind)
+{
+	let found = false;
+	for (let i = 0; i < someEntriesArray.length; i++)
+	{
+		if(someEntriesArray[i].recordId == theRecordIdToFind)
+		{
+			found = i;
+		}
+	}
+	//return i;
+	return found;
+}
+
+                      //i
+function addRecord(theIdHere)
+{
+	let largestId = Math.max.apply(Math,records.map(function(o){
+		return o.recordId;}));
+	let addingOneToLargestId = largestId + 1;
+
+	recordEntry =
+		{
+			//recordId: i,
+			name: nameEntered, //was note
+			age: ageEntered,   //was words
+			dob: dobEntered,    //was conclusion
+			dateMissing: dateMissingEntered,
+			dayMissing: dayMissingEntered,
+			timeMissing: timeMissingEntered,
+			locationMissing: locationMissingEntered,
+			locationMissingDetails: locationMissingDetailsEntered,
+			image: imageEntered,
+			height: heightEntered,
+			weight: weightEntered,
+			hairColor: hairColorEntered,
+			eyeColor: eyeColorEntered,
+			suspects: suspectsEntered,
+			burialSite: burialSiteEntered,
+			urlLink: urlLinkEntered,
+			urlMap: urlMapEntered,
+			tag: tagEntered
+		};
+
+	//idOfRecord = i;
+	idOfRecord = theIdHere;
+
+	records.push(recordEntry); //add item to end of array
+
+	//console.log("records=" + JSON.stringify(records) + ";");
+	console.log("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n");
+	printRecords();
+
+	howManyRecords();
+	startClear();	
+}
+
+function editThisRecord(i)
+{
+	nameEntered = document.getElementById(i+'-name').value;
+	ageEntered = document.getElementById(i+'-age').value;
+	dobEntered = document.getElementById(i+'-dob').value;
+
+	dateMissingEntered = document.getElementById(i+'-dateMissing').value;
+
+	timeMissingEntered = document.getElementById(i+'-timeMissing').value;
+
+	locationMissingEntered = document.getElementById(i+'-locationMissing').value;
+
+	locationMissingDetailsEntered=document.getElementById(i+'-locationMissingDetails').value;
+
+	imageEntered = document.getElementById(i+'-image').value;
+	heightEntered = document.getElementById(i+'-height').value;
+	weightEntered = document.getElementById(i+'-weight').value;
+	hairColorEntered = document.getElementById(i+'-hairColor').value;
+	eyeColorEntered = document.getElementById(i+'-eyeColor').value;
+	suspectsEntered = document.getElementById(i+'-suspects').value;
+	burialSiteEntered = document.getElementById(i+'-burialSite').value;
+	urlLinkEntered = document.getElementById(i+'-urlLink').value;
+	urlMapEntered = document.getElementById(i+'-urlMap').value;
+	tagEntered = document.getElementById(i+'-tag').value;
+
+	let existingId = records[i].recordId;
+
+	recordEntry =
+	{
+		//recordId: i,
+		recordId: existingId,
+		name: nameEntered,  //was note
+		age: ageEntered,    //was words
+		dob: dobEntered,    //was conclusion
+		dateMissing: dateMissingEntered,
+		dayMissing: dayMissingEntered,
+		timeMissing: timeMissingEntered,
+		locationMissing: locationMissingEntered,
+		locationMissingDetails: locationMissingDetailsEntered,
+		image: imageEntered,
+		height: heightEntered,
+		weight: weightEntered,
+		hairColor: hairColorEntered,
+		eyeColor: eyeColorEntered,
+		suspects: suspectsEntered,
+		burialSite: burialSiteEntered,
+		urlLink: urlLinkEntered,
+		urlMap: urlMapEntered,
+		tag: tagEntered
+	};
+
+	records.splice(i,1,recordEntry);
+
+	//console.log("records= " + JSON.stringify(records) + ";");
+	//console.log("records= " + JSON.stringify(records) + ";");
+
+	console.log("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n");
+
+	printRecords();
+}
+
+function printRecords()
+{
+	if(records.length == 0)
+	{
+		theHtmlAddRecordWithTable = "";
+		theHtmlAddRecordWithTable += '<body>';
+		document.getElementById('displayRecord').innerHTML = theHtmlAddRecordWithTable;
+	}
+
+	console.log("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n");
+
+	theHtmlAddRecordWithTable = "";
+
+	theHtmlAddRecordWithTable += '<body>';
+
+	//theHtmlAddRecordWithTable += '<script src="playFunction.js"><\/script>';
+
+	for(i = 0; i < records.length; i++)
+	{
+		//let videoId = "newVideoPlayer" + i;
+
+		console.log("Records Array Contains " + records.length + " Entries");
+
+		//theHtmlAddRecordWithTable += '<table width="100%"><tr><td width="50%"><div><font color="white"></font></div>';
+
+		//Array Number - Record Number - Starts at 0
+		theHtmlAddRecordWithTable += '<table width="60%"><tr><td><div class="fontColorHere">#'+ i +' <br></div>';
+
+		//date Missing ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">DATE MISSING</div><textarea id="'+i+'-dateMissing" rows="8" cols="50" class="printTableStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].dateMissing+' </textarea></div>';
+
+		//day Missing ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div class="whiteFont">DAY MISSING</div><textarea id="'+i+'-dayMissing" rows="8" cols="50" class="printTableStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].dayMissing+' </textarea>';
+
+		//time Missing ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div class="whiteFont">TIME MISSING</div><textarea id="'+i+'-timeMissing" rows="8" cols="50" class="printTableStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].timeMissing+' </textarea></div>';
+
+		//location Missing ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">LOCATION MISSING</div><textarea id="'+i+'-locationMissing" rows="8" cols="50" class="printTableStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].locationMissing+'</textarea></div>';
+
+		//location Missing Details ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">LOCATION MISSING DETAILS</div><textarea id="'+i+'-locationMissingDetails" rows="8" cols="50" class="locationMissingDetailsStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].locationMissingDetails+'</textarea></div></td>';
+
+		//name ENTERED BY USER   name
+		theHtmlAddRecordWithTable +='<td><div><div class="whiteFont">NAME</div><textarea id="'+i+'-name" rows="8" cols="50" class="middleStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].name+'</textarea></div>';
+
+		//age, TYPED BY USER   age              
+		theHtmlAddRecordWithTable +='<div><DIV class="whiteFont">AGE</DIV><textarea id="'+i+'-age" rows="8" cols="50" class="middleStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].age+'</textarea></div>';
+
+		//dob ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">DOB</div><textarea id="'+i+'-dob" rows="8" cols="50" class="middleStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].dob+'</textarea></div>';
+
+		//image ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">IMAGE NAME</div><textarea id="'+i+'-image" rows="8" cols="50" class="middleStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].image+'</textarea></div>';
+
+		//height ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">HEIGHT</div><textarea id="'+i+'-height" rows="8" cols="50" class="middleStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].height+'</textarea></div>';
+
+		//weight ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">WEIGHT</div><textarea id="'+i+'-weight" rows="8" cols="50" class="middleStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].weight+'</textarea></div>';
+
+		//hair Color ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">HAIR COLOR</div><textarea id="'+i+'-hairColor" rows="8" cols="50" class="middleStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].hairColor+' </textarea></div>';
+
+		//eye Color ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">EYE COLOR</div><textarea id="'+i+'-eyeColor" rows="8" cols="50" class="middleStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].eyeColor+' </textarea></div></td>';
+
+		//suspects ENTERED BY USER
+		theHtmlAddRecordWithTable +='<td><div><div class="whiteFont">SUSPECTS</div><textarea id="'+i+'-suspects" rows="8" cols="50" class="printTableStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].suspects+' </textarea></div>';
+
+		//url Link ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">URL LINK</div><textarea id="'+i+'-urlLink" rows="8" cols="50" class="printTableStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].urlLink+' </textarea></div>';
+
+		//url Map ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">URL MAP</div><textarea id="'+i+'-urlMap" rows="8" cols="50" class="printTableStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].urlMap+' </textarea></div>';
+
+		//tag ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">TAG</div><textarea id="'+i+'-tag" rows="8" cols="50" class="printTableStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].tag+'</textarea></div>';
+
+		//burial Site ENTERED BY USER
+		theHtmlAddRecordWithTable +='<div><div class="whiteFont">BURIAL SITE</div><textarea id="'+i+'-burialSite" rows="8" cols="50" class="burialSiteStyle" type="text" onchange="editThisRecord('+i+')">'+records[i].burialSite+' </textarea></div></td></tr></table>';
+
+		//theHtmlAddRecordWithTable += '';
+
+		//MOVE UP BUTTON
+		theHtmlAddRecordWithTable += '<button class="videoButtons" id=\''+i+'\' onclick="moveRecordUp('+i+')">UP</button>';
+
+		//MOVE DOWN BUTTON
+		theHtmlAddRecordWithTable += '<button class="videoButtons" id=\''+i+'\' onclick="moveRecordDown('+i+')">Down</button>&nbsp &nbsp';
+
+		//DELETE THIS RECORD															="'+i+'-words"
+		theHtmlAddRecordWithTable += '<button class="videoButtons" id="'+i+'-deleteThis" onclick="deleteThisRecordButton('+i+')"> 🗑 Delete </button>&nbsp &nbsp';
+
+		//KEEP ONLY THIS RECORD BUTTON ⍝
+		theHtmlAddRecordWithTable += '<button class="videoButtons" id="'+i+'-keepOnlyThis" onclick="keepOnlyThisRecordButton('+i+')">Keep Only</button><br> ';
+
+		theHtmlAddRecordWithTable += '<hr>';	
+
+		theHtmlAddRecordWithTable += '</td></tr></table>';
+	}	
+		document.getElementById('displayRecord').innerHTML = theHtmlAddRecordWithTable;
+		howManyRecords();
+}
+
+function reportToConsole()
+{
+	console.log("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n");
+}
+
+function fullReportFormatted()
+{
+	let reportText = "";
+	reportText += (
+	//"records=" + JSON.stringify(records, null) + ";" +
+	JSON.stringify(records) + ";");
+	return reportText;
+}
+
+function fullReportCodeNewWindow()
+{
+	var myText = "";
+	myText += ("records=" + JSON.stringify(records, null, ' ') + ";" + "\n\n") + "<br>";
+
+	let newWindow = window.open("","test","left=10 top=10 width=1200, height=600,scrollbars=1,resizable=1", true);
+
+    newWindow.document.open();
+    newWindow.document.write(myText);
+    newWindow.document.close();
+}
+
+function reportSimple()
+{
+	var myText = "";
+
+	for(var i = 0; i < records.length; i++)
+    {
+      myText += "NAME: " + records[i].name;
+	  myText += '<br>';
+	  myText += "AGE: " + records[i].age;
+	  myText += '<br>';
+	  myText += "DOB: " + records[i].dob;
+	  myText += '<br>';
+	  myText += "DATE MISSING: " + records[i].dateMissing;
+	  myText += '<br>';
+	  myText += "DAY MISSING: " + records[i].dayMissing;
+	  myText += '<br>';
+	  myText += "TIME MISSING: " + records[i].timeMissing;
+	  myText += '<br>';
+	  myText += "LOCATION MISSING: " + records[i].locationMissing;
+	  myText += '<br>';
+	  myText += "LOCATION MISSING DETAILS: " + records[i].locationMissingDetails;
+	  myText += '<br>';
+	  myText += "IMAGE NAME: " + records[i].image;
+	  myText += '<br>';
+	  myText += "HEIGHT: " + records[i].height;
+	  myText += '<br>';
+	  myText += "WEIGHT: " + records[i].weight;
+	  myText += '<br>';
+	  myText += "HAIR COLOR: " + records[i].hairColor;
+	  myText += '<br>';
+	  myText += "EYE COLOR: " + records[i].eyeColor;
+	  myText += '<br>';
+	  myText += "SUSPECTS: " + records[i].suspects;
+	  myText += '<br>';
+	  myText += "BURIAL SITE: " + records[i].burialSite;
+	  myText += '<br>';
+	  myText += "URL LINK: " + records[i].urlLink;
+	  myText += "&nbsp";
+	  myText += '<a href= \''+records[i].urlLink+'\' target="_blank">URL LINK</a>';
+
+	  myText += '<br>';
+
+	  myText += "URL MAP: " + records[i].urlMap;
+	  myText += "&nbsp";
+	  myText += '<a href= \''+records[i].urlMap+'\' target="_blank">URL MAP LINK</a>';
+	  myText += '<br>';
+
+	  myText += "TAG: " + records[i].tag;
+	  myText+= '<br><hr>';
+	}
+    //jsonOutputDiv.innerHTML = output;
+
+	let newWindow = window.open("","test","left=10 top=10 width=1200, height=600,scrollbars=1,resizable=1", true);
+
+    newWindow.document.open();
+    newWindow.document.write(myText);
+    newWindow.document.close();
+}
+</script>
+
+<style>
+
+.flexColumn  /*display nameStyle words conclusion timecode */
+{
+	display:flex;
+	flex-direction: row;
+	flex-basis: auto;
+	flex-wrap: wrap;
+	justify-content: center;
+	text-align: center;
+}
+
+body {
+/* background-image: url('bg_grid.png'); */
+background-color:#194455;
+/* width: 1200px; */
+/* margin: 0 auto; */
+}
+
+*{
+	font-family: Verdana, sans-serif;;  /*Bevan,serif; Arial*/
+	font-weight: normal;
+}
+
+.fontColorBigger {
+	color: rgb(255,255,255);
+	font-size:32px;
+}
+
+.fontColorHere {
+	color: rgb(255,255,255);
+	font-size:21px;
+	margin-top: 10px;
+}
+
+.note {
+  /* color: rgb(255,255,0); */
+	color: white;
+	font-size:21px;
+}
+
+.words {
+	color: white;
+	font-size:21px;
+}
+
+.conclusion {
+	color: white;
+	font-size:21px;
+}
+
+.whiteFont {
+	color: white;
+	font-size:16px;
+}
+
+
+.videoLook {
+	border:0px solid;
+	border-color: white;
+	/* width: 900px; */
+}
+
+.titleBig {
+	padding-left: 40px;
+  	color: rgb(255,255,255);
+	font-size:27px;
+}
+
+.videoButtons {
+	text-align:center;
+
+	/* height:25px; */
+	border-radius:5px;
+  	display: inline-block; /*fits button to text */
+	border:3px solid #145075;
+	cursor:pointer;
+	color:black;
+	font-size:15px;
+	padding: 0px 5px;
+}
+
+.videoButtons:hover {
+	/* background:linear-gradient(to bottom, #011117 1%, #019ad2 50%);  */
+	background: rgb(210,230,230);
+	color: black;
+}
+
+.videoButtons:visited {
+	top:1px;
+	color:black;
+}
+
+.videoButtons:active {
+	top:1px;
+	color:black;
+}
+
+.videoButtons:focus {
+	top:1px;
+	color:black;
+}
+
+.myVideoButtonSmaller{
+	width: 150px;
+	align-content: flex-end;
+}
+
+.myButton {
+	height:25px;
+	background-color: white;
+	 border-radius:2px;
+	/* border:3px solid #145075; */
+	/* display:inline-block; */
+	cursor:pointer;
+	color:black;
+	font-size:16px;
+}
+
+.myButton:hover {
+	/* background:linear-gradient(to bottom, #011117 1%, #019ad2 50%);  */
+	background: rgb(210,230,230);
+	color: black;
+}
+
+.myButton:visited {
+	top:1px;
+	color:black;
+}
+
+.myButton:active {
+	top:1px;
+	color:black;
+}
+
+.myButton:focus {
+	top:1px;
+	color:black;
+}
+
+.myButtonSmaller {
+	font-size:12px;
+	height: 25px;
+	 padding-right:10px; */
+	/* margin:0px; */
+	width: 30px;
+}
+
+.myButtonMedium {
+	font-size: 15px;
+}
+
+.myTextBox2 {
+	text-align: center;
+	width:60px;
+	height: 14px;
+	border-radius:6px;
+	border:2px solid #92beda;
+	display:inline-block;
+	cursor:pointer;
+	color:black;
+	font-size:16px;
+	padding:2px 7px;
+	text-decoration:none;
+	/* text-shadow:0px -1px 0px #5b6178; makes it bolder */
+}
+
+.myTextBox2:hover {
+	background:linear-gradient(to bottom, #011117 5%, #019ad2 50%);
+	background-color:#019ad2;
+	color: white;
+}
+
+.myTextBox2:active {
+	position:relative;
+	top:1px;
+}
+
+.nameStyle
+{
+	height:40px;
+	width:15%;
+	box-sizing: border-box;
+	background-color: rgb(240,240,240);
+	border-radius:6px;
+	border:3px solid rgb(0,0,0);
+	border-color: black;
+	cursor:pointer;
+	color:black;
+	font-size:14px;
+	padding:9px 9px;
+	text-decoration:none;
+}
+
+.nameStyle:hover {
+	border-color:blue;
+	background-color: rgb(210,230,230);
+}
+
+.nameStyle:active {
+	 position:relative;
+	 top:1px;
+}
+
+.tableNameStyle
+{
+	height:40px;
+	width:95%;
+	/* box-sizing: border-box; */
+	background-color: rgb(240,240,240);
+	border-radius:6px;
+	border:3px solid rgb(0,0,0);
+	border-color: black;
+	cursor:pointer;
+	color: black;
+	font-size:14px;
+	padding-left:10px;
+	padding-top:8px;
+	text-decoration:none;
+}
+
+.tableNameStyle:hover {
+	border-color:blue;
+	background-color: rgb(210,230,230);
+}
+
+.tableNameStyle:active {
+	 position:relative;
+	 top:1px;
+	 border-color:rgb(198, 198, 240);
+}
+
+td
+{
+   padding:0 5px;
+}
+
+.printTableStyle
+{
+	height:30px;
+	/*width:95%;*/
+	/* box-sizing: border-box; */
+	background-color: rgb(240,240,240);
+	border-radius:6px;
+	border:3px solid rgb(0,0,0);
+	border-color: black;
+	cursor:pointer;
+	color: black;
+	font-size:14px;
+	padding-left:10px;
+	padding-top:8px;
+	text-decoration:none;
+	margin: 5px;
+	
+}
+
+.printTableStyle:hover {
+	border-color:blue;
+	background-color: rgb(210,230,230);
+}
+
+.printTableStyle:active {
+	 position:relative;
+	 top:1px;
+	 border-color:rgb(198, 198, 240);
+}
+
+.locationMissingDetailsStyle
+{
+	height:250px;
+	/*width:95%;*/
+	/* box-sizing: border-box; */
+	background-color: rgb(240,240,240);
+	border-radius:6px;
+	border:3px solid rgb(0,0,0);
+	border-color: black;
+	cursor:pointer;
+	color: black;
+	font-size:14px;
+	padding-left:10px;
+	padding-top:8px;
+	text-decoration:none;
+	margin: 5px;
+}
+
+.locationMissingDetailsStyle:hover {
+	border-color:blue;
+	background-color: rgb(210,230,230);
+}
+
+.locationMissingDetailsStyle:active {
+	 position:relative;
+	 top:1px;
+	 border-color:rgb(198, 198, 240);
+}
+
+.burialSiteStyle
+{
+	height:250px;
+	/*width:95%;*/
+	/* box-sizing: border-box; */
+	background-color: rgb(240,240,240);
+	border-radius:6px;
+	border:3px solid rgb(0,0,0);
+	border-color: black;
+	cursor:pointer;
+	color: black;
+	font-size:14px;
+	padding-left:10px;
+	padding-top:8px;
+	text-decoration:none;
+	margin: 5px;
+}
+
+.burialSiteStyle:hover {
+	border-color:blue;
+	background-color: rgb(210,230,230);
+}
+
+.burialSiteStyle:active {
+	 position:relative;
+	 top:1px;
+	 border-color:rgb(198, 198, 240);
+}
+
+.middleStyle
+{
+	height:25px;
+	width: 150px;
+	/*width:45%;*/
+	/* box-sizing: border-box; */
+	background-color: rgb(240,240,240);
+	border-radius:6px;
+	border:3px solid rgb(0,0,0);
+	border-color: rgb(255, 255, 255);
+	cursor:pointer;
+	color: black;
+	font-size:14px;
+	padding-left:10px;
+	padding-top:8px;
+	text-decoration:none;
+	margin: 5px;
+}
+
+.middleStyle:hover {
+	border-color:blue;
+	background-color: rgb(210,230,230);
+}
+
+.middleStyle:active {
+	 position:relative;
+	 top:1px;
+	 border-color:rgb(198, 198, 240);
+}
+/*
+table
+{
+	margin: 0px auto;
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(255, 255, 255);
+}
+*/
+/*
+details {
+  margin: 1rem;
+  padding: 0 1rem;
+  width: 17em;
+  border: 1px solid rgb(166, 203, 221);
+  border-radius: 6px;
+  background-color: rgb(0, 0, 0);
+  color: #263238;
+  transition: background-color .15s;
+}
+*/
+
+summary::marker{
+	color:white;
+}
+</style>
+
+</head>
+
+<body id="bodySection" onload="loadFunctions();">
+
+<div class="fontColorHere"><center>MISSING PERSONS DATABASE</center>
+</div>
+	<hr>
+<div id="nameStyle">
+	<!-- NAME of Victim -->
+	<!-- onchange="setName()" onload="clearText()"-->
+
+	<!--<textarea id="nameInput" placeholder="NAME" rows="4" cols="50" class="nameStyle" type="text"></textarea>-->
+
+	<textarea id="nameInput" placeholder="NAME" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- AGE of Victim -->
+	<!-- onchange="setAge()" onload="clearText()" -->
+	<textarea id="ageInput" placeholder="AGE" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- DOB of Victim -->
+	<!-- onchange="setDob()" onload="clearText()" -->
+	<textarea id="dobInput" placeholder="DOB" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- date Missing -->
+	<textarea id="dateMissingInput" placeholder="Date Missing" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- day Missing -->
+	<textarea id="dayMissingInput" placeholder="Day Missing" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- time Missing -->
+	<textarea id="timeMissingInput" placeholder="Time Missing" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- location Missing -->
+	<textarea id="locationMissingInput" placeholder="Location Missing" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- location Missing Details -->
+	<textarea id="locationMissingDetailsInput" placeholder="Location Missing Details" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- image -->
+	<textarea id="imageInput" placeholder="Image Name" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- height -->
+	<textarea id="heightInput" placeholder="Height" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- weight -->
+	<textarea id="weightInput" placeholder="Weight" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- hairColor -->
+	<textarea id="hairColorInput" placeholder="Hair Color" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- eyeColor -->
+	<textarea id="eyeColorInput" placeholder="Eye Color" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- suspects -->
+	<textarea id="suspectsInput" placeholder="Suspects" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- burial Site -->
+	<textarea id="burialSiteInput" placeholder="Burial Site" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- url Link -->
+	<textarea id="urlLinkInput" placeholder="Url Link" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- url Map -->
+	<textarea id="urlMapInput" placeholder="Url Map" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+
+	<!-- tag -->
+	<textarea id="tagInput" placeholder="Tag" rows="4" cols="50" class="nameStyle" type="text"></textarea>
+</div>
+
+<hr>
+
+	<!-- Add Record Button -->
+	<!-- onclick="addRecord() -->
+	<center>
+	<div class="addRecordButtonContainer">
+	  <button id="addRecordButton" class="myButton" value="ADD RECORD">
+			Add Record Ѫ
+	  </button>
+	  <b class="fontColorBigger" id="displayCount" align="left"></b>
+	    &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+		<!-- onclick="clearText()" -->
+		<input type="button" class="videoButtons myVideoButtonSmaller" id="clearTextButton" value="Clear All Text ⌦"></button>
+	</div>
+</center>
+</div>
+
+<hr>
+
+</center>
+
+<!-- onclick="reportSimple()" -->
+<input class="videoButtons" id="simpleReport" type="button" value="Report Simplified" onclick="reportSimple()">
+
+<div class="titleBig" align="left">
+	<!-- jsonDownload(records)" value="download"> -->
+	<button id="jsonDownloadButton" class="videoButtons" value="download">
+	⎙ Download Records
+	</button>
+
+	<a id="downloadAnchorElem" style="display:none"></a>
+			
+	<!-- onclick="fullReportCodeNewWindow()" -->
+	<input type="button" class="videoButtons" id="fullReportNewWindowButton" value="REPORT CODE to NEW WINDOW">
+	
+	<!-- onclick="reportToConsole()" -->
+	<input class="videoButtons" id="fullReportCodeButton" type="button" value="REPORT CODE to Console Press F12" onclick="reportToConsole()">
+	
+	<input class="videoButtons" id="clearAllRecordsButton" type="button" value="Clear All Records">
+<br>
+&nbsp &nbsp
+    <input id="deleteRecordInput" class="myTextBox2" type="text">
+	<!-- onclick="deleteThisRecord()" -->
+    <input class="videoButtons" id="deleteThisRecordButton" type="button" value="Record # to Delete">
+	<div class="note" id="displayDeletedRecord"></div>
+			
+	<!-- onclick="showReverseOrder()" -->
+	<input class="videoButtons" id="showReverseOrderButton" type="button" value="Reverse Record Order">	
+</div>
+<hr>
+  <!-- DISPLAYS THE ENTRIES -->
+	<div id="displayRecord"></div>
+
+</body>
+</html>
