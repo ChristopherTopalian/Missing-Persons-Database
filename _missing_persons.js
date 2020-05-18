@@ -248,7 +248,7 @@ records = [
     /*TAMMY*/
     name: "Tammy Sandoval",
     age: "17",
-    dob: "11/21/2001 hispanic",
+    dob: "11/21/2001",
     dateMissing: "6/26/2019",
     dayMissing: "Thursday", 
     timeMissing: "?",   
